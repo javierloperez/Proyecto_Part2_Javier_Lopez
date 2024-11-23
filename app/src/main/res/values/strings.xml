@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Proyecto_Part1_Javier_Lopez</string>
+    <string name="info">Información</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellidos">Apellidos</string>
+    <string name="gmail">Correo electronico</string>
+    <string name="telefono">Telefono</string>
+    <string name="listarPedidos">Listar pedidos</string>
+    <string name="realizarPedido">Realizar un pedido</string>
+    <string name="turismo">Turismo</string>
+    <string name="moto">Moto</string>
+    <string name="patinete">Patinete</string>
+    <string name="gasolina">Gasolina</string>
+    <string name="diesel">Diésel</string>
+    <string name="electrico">Eléctrico</string>
+    <string name="combustible">Tipo de combustible</string>
+    <string name="cilindrada">Tipo de cilindrada</string>
+    <string name="patineteTipo">Tipo de patinete</string>
+    <string name="no">No</string>
+    <string name="si">Si</string>
+    <string name="diasAlquilar">Dias a alquilar</string>
+    <string name="guardar">Guardar</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="tipoDeVehiculo">Tipo de vehiculo</string>
+    <string name="gps">Añadir GPS</string>
+    <string name="precio">Precio</string>
+    <string name="volver">Volver</string>
+    <string name="formularioPago">Formulario del pago</string>
+    <string name="tipoTarjeta">Tipo de tarjeta</string>
+    <string name="numTarjeta">Numero de tarjeta</string>
+    <string name="fechaCad">Fecha caducidad</string>
+    <string name="resumenPago">Resumen del pago</string>
+    <string name="cvv" translatable="false">CVV</string>
+    <string name="enviar">Enviar</string>
+    <string name="justificante">Justificante enviado</string>
+    <string name="diasAlquilados">Dias alquilados</string>
+    <string name="atras">Atrás</string>
+    <string name="pagar">Pagar</string>
+    <string name="pedido">Pedido %1$s</string>
+
+</resources>
