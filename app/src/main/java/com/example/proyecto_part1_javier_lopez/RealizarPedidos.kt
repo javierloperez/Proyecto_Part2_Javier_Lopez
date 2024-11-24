@@ -52,8 +52,8 @@ fun HacerPedido(
     val (estadoGps, paraEstadoGps) = remember { mutableStateOf(0) }
     val tipoVehiculo = listOf(R.string.turismo, R.string.moto, R.string.patinete)
     val respuesta = listOf(R.string.si, R.string.no)
-    @StringRes var combustible: Int = 0
-    var cilindrada: String = ""
+    var combustible by remember { mutableStateOf(0) }
+    var cilindrada by remember { mutableStateOf("") }
     var num by remember { mutableStateOf(0) }
     var gps: Boolean by remember { mutableStateOf(false) }
     var dias by remember { mutableStateOf("") }
@@ -143,7 +143,8 @@ fun HacerPedido(
             ) {
                 when (num) {
                     0 -> {
-                        combustible = SeleccionarTurismos()
+                        SeleccionarTurismos(onCambioCombustible = {combustible=it})
+
                         when (combustible) {
                             R.string.gasolina -> precio += 25
                             R.string.diesel -> precio += 20
@@ -154,7 +155,7 @@ fun HacerPedido(
                     }
 
                     1 -> {
-                        cilindrada = SeleccionarMoto()
+                         SeleccionarMoto(onCambioCilindrada={cilindrada=it})
                         when (cilindrada) {
                             "50cc" -> precio += 10
                             "125cc" -> precio += 15
@@ -165,7 +166,8 @@ fun HacerPedido(
                     }
 
                     2 -> {
-                        precio += SeleccionarPatinete()
+                        SeleccionarPatinete()
+                        precio +=5
                         vehiculo = Patinete(gps)
                     }
 
@@ -341,8 +343,8 @@ fun HacerPedido(
 
 
 @Composable
-fun SeleccionarPatinete(): Int {
-    val coste: Int = 5
+fun SeleccionarPatinete() {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -362,14 +364,13 @@ fun SeleccionarPatinete(): Int {
         )
     }
 
-    return coste
 }
 
 @Composable
-fun SeleccionarMoto(): String {
+fun SeleccionarMoto(onCambioCilindrada:(String) -> Unit) {
     val (estado, paraEstado) = remember { mutableStateOf("") }
     val cilindradas = listOf("50cc", "125cc", "250cc")
-    var seleccion by remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier
@@ -392,7 +393,7 @@ fun SeleccionarMoto(): String {
                         selected = (valor == estado),
                         onClick = {
                             paraEstado(valor)
-                            seleccion = valor
+                            onCambioCilindrada(valor)
                         },
                         role = Role.RadioButton
                     )
@@ -405,7 +406,7 @@ fun SeleccionarMoto(): String {
                     selected = (valor == estado),
                     onClick = {
                         paraEstado(valor)
-                        seleccion = valor
+                        onCambioCilindrada(valor)
                     },
 
 
@@ -420,15 +421,14 @@ fun SeleccionarMoto(): String {
             }
         }
     }
-    return seleccion
 }
 
 @Composable
-fun SeleccionarTurismos(): Int {
+fun SeleccionarTurismos(
+    onCambioCombustible:(Int) -> Unit,
+){
     val (estado, paraEstado) = remember { mutableStateOf(0) }
     val combustibles = listOf(R.string.gasolina, R.string.diesel, R.string.electrico)
-    var seleccion by remember { mutableStateOf(0) }
-    var coste: Int = 0
 
 
     Column(
@@ -453,7 +453,7 @@ fun SeleccionarTurismos(): Int {
                         selected = (valor == estado),
                         onClick = {
                             paraEstado(valor)
-                            seleccion = valor
+                            onCambioCombustible(valor)
 
                         },
 
@@ -467,9 +467,7 @@ fun SeleccionarTurismos(): Int {
                     selected = (valor == estado),
                     onClick = {
                         paraEstado(valor)
-                        seleccion = valor
-
-
+                        onCambioCombustible(valor)
                     },
 
 
@@ -485,9 +483,6 @@ fun SeleccionarTurismos(): Int {
 
         }
     }
-
-
-    return seleccion
 }
 
 

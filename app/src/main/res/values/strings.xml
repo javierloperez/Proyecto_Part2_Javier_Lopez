@@ -38,5 +38,6 @@
     <string name="atras">Atrás</string>
     <string name="pagar">Pagar</string>
     <string name="pedido">Pedido %1$s</string>
+    <string name="justificanteAsunto">"Justificante de pago de "</string>
 
 </resources>

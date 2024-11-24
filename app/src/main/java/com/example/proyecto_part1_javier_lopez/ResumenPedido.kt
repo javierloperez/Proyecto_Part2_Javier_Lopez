@@ -39,7 +39,7 @@ fun ResumenPedido(modifier: Modifier = Modifier, onPagar: () -> Unit, pedido: Pe
 
     var gpsRespuesta:Int = 0
     @StringRes var tipoVehiculo by remember { mutableStateOf(0) }
-
+    var imagen by remember { mutableStateOf(0) }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -68,6 +68,13 @@ fun ResumenPedido(modifier: Modifier = Modifier, onPagar: () -> Unit, pedido: Pe
                     +"\n\n"+stringResource(R.string.cilindrada)+": " +(pedido.vehiculos as Moto).tipo_cilindrada,
                     style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     )
+
+                    when((pedido.vehiculos as Moto).tipo_cilindrada){
+                        "50cc"->{imagen=R.drawable.moto50cc}
+                        "125cc"->{imagen=R.drawable.moto125cc}
+                        "250cc"->{imagen=R.drawable.moto250cc}
+                    }
+                
                 }
                 is Turismo->{
                     tipoVehiculo=R.string.turismo
@@ -77,6 +84,12 @@ fun ResumenPedido(modifier: Modifier = Modifier, onPagar: () -> Unit, pedido: Pe
                         +"\n\n"+stringResource(R.string.combustible) +": " +stringResource((pedido.vehiculos as Turismo).tipo_combustible),
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     )
+
+                    when((pedido.vehiculos as Turismo).tipo_combustible){
+                        R.string.gasolina->{imagen=R.drawable.cochegasolina}
+                        R.string.diesel->{imagen=R.drawable.cochediesel}
+                        R.string.electrico->{imagen=R.drawable.cocheelectrico}
+                    }
                 }
                 is Patinete->{
                     tipoVehiculo=R.string.patinete
@@ -85,6 +98,8 @@ fun ResumenPedido(modifier: Modifier = Modifier, onPagar: () -> Unit, pedido: Pe
                         +"\n\n"+stringResource(R.string.patineteTipo) +": " +stringResource((pedido.vehiculos as Patinete).tipo_combustible),
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                     )
+
+                    imagen=R.drawable.patineteelectrico
                 }
 
             }
@@ -102,7 +117,7 @@ fun ResumenPedido(modifier: Modifier = Modifier, onPagar: () -> Unit, pedido: Pe
 
         }
         Image(
-            painter = painterResource(R.drawable.imagen_desarrollo),
+            painter = painterResource(imagen),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier

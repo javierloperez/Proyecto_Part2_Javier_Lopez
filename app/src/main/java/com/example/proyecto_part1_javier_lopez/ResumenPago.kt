@@ -1,6 +1,8 @@
 package com.example.proyecto_part1_javier_lopez
 
-import androidx.annotation.StringRes
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,18 +20,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import modelos.AppUIState
+import datos.Datos
 import modelos.Pago
 import modelos.Pedidos
+import modelos.Users
 
 @Composable
 fun ResumenPago(modifier: Modifier = Modifier, onAceptar: () -> Unit, pago: Pago, pedidos: Pedidos) {
     var mensaje by remember { mutableStateOf(false) }
+    val contexto = LocalContext.current
+    val asunto:String = stringResource(R.string.justificanteAsunto)
+    val user : Users = Datos().infoUser()
+    val tipoTarjeta:String = stringResource(R.string.tipoTarjeta)
+    val cvv:String = stringResource(R.string.cvv)
+    val numTarjeta:String = stringResource(R.string.numTarjeta)
+    val fechaCad:String = stringResource(R.string.fechaCad)
+    val precio:String = stringResource(R.string.precio)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -88,6 +100,22 @@ fun ResumenPago(modifier: Modifier = Modifier, onAceptar: () -> Unit, pago: Pago
                 Button(
                     onClick = {
                         mensaje = true
+                        val intent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_EMAIL, arrayOf("usuario@example.com"))
+                            putExtra(Intent.EXTRA_SUBJECT, asunto + user.nombre)
+                            putExtra(Intent.EXTRA_TEXT, tipoTarjeta+": " + pago.tipoTarjeta
+                            +"\n\n"+numTarjeta+": "+pago.numeroTarjeta
+                            +"\n\n"+fechaCad+": "+pago.caducidadTarjeta
+                            +"\n\n"+cvv+": "+pago.cvvTarjeta
+                            +"\n\n"+precio+": "+pedidos.precio+"€")
+                            putExtra(Intent.EXTRA_STREAM, Uri.parse("content://path/to/email/attachment"))
+                        }
+
+                        try {
+                            contexto.startActivity(intent)
+                        } catch (e: ActivityNotFoundException) {
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(Color.Green),
                     modifier = Modifier

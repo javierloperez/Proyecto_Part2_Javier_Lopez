@@ -2,7 +2,10 @@ package com.example.proyecto_part1_javier_lopez
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,13 +43,12 @@ import modelos.Turismo
 fun LlamadaPedidos(modifier: Modifier = Modifier, pedidos: List<Pedidos>) {
 
 
-
     var pedidoElegido by remember { mutableStateOf(pedidos[0]) }
     var vehiculos = listOf(R.string.turismo, R.string.patinete, R.string.moto)
     var tipo by remember { mutableIntStateOf(vehiculos[0]) }
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(top = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -53,10 +57,11 @@ fun LlamadaPedidos(modifier: Modifier = Modifier, pedidos: List<Pedidos>) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 15.dp),
+                .padding(top = 15.dp)
+                .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            itemsIndexed(pedidos) { i,pedido ->
+            itemsIndexed(pedidos) { i, pedido ->
                 Button(
                     modifier = Modifier
                         .width(250.dp)
@@ -88,7 +93,7 @@ fun LlamadaPedidos(modifier: Modifier = Modifier, pedidos: List<Pedidos>) {
                 ) {
 
                     Text(
-                        text = stringResource(R.string.pedido, i+1),
+                        text = stringResource(R.string.pedido, i + 1),
                         style = TextStyle(fontSize = 17.sp)
                     )
 
@@ -99,17 +104,17 @@ fun LlamadaPedidos(modifier: Modifier = Modifier, pedidos: List<Pedidos>) {
         }
 
 
-        MostrarPedido(pedidoElegido)
+        MostrarPedido(modifier = modifier.weight(0.5f),pedidoElegido)
 
     }
 }
 
 @Composable
-fun MostrarPedido(pedido: Pedidos) {
-    Card {
+fun MostrarPedido(modifier: Modifier = Modifier, pedido: Pedidos) {
+
         var gpsRespuesta: Int = 0
         @StringRes var tipoVehiculo by remember { mutableStateOf(0) }
-
+        var imagen by remember { mutableStateOf(0) }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -140,6 +145,21 @@ fun MostrarPedido(pedido: Pedidos) {
                                     + "\n\n" + stringResource(R.string.cilindrada) + ": " + (pedido.vehiculos as Moto).tipo_cilindrada,
                             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                         )
+
+                        when ((pedido.vehiculos as Moto).tipo_cilindrada) {
+                            "50cc" -> {
+                                imagen = R.drawable.moto50cc
+                            }
+
+                            "125cc" -> {
+                                imagen = R.drawable.moto125cc
+                            }
+
+                            "250cc" -> {
+                                imagen = R.drawable.moto250cc
+                            }
+                        }
+
                     }
 
                     is Turismo -> {
@@ -154,6 +174,20 @@ fun MostrarPedido(pedido: Pedidos) {
                             ),
                             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                         )
+
+                        when ((pedido.vehiculos as Turismo).tipo_combustible) {
+                            R.string.gasolina -> {
+                                imagen = R.drawable.cochegasolina
+                            }
+
+                            R.string.diesel -> {
+                                imagen = R.drawable.cochediesel
+                            }
+
+                            R.string.electrico -> {
+                                imagen = R.drawable.cocheelectrico
+                            }
+                        }
                     }
 
                     is Patinete -> {
@@ -167,6 +201,8 @@ fun MostrarPedido(pedido: Pedidos) {
                             ),
                             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                         )
+
+                        imagen = R.drawable.patineteelectrico
                     }
 
                 }
@@ -184,7 +220,7 @@ fun MostrarPedido(pedido: Pedidos) {
 
             }
             Image(
-                painter = painterResource(R.drawable.imagen_desarrollo),
+                painter = painterResource(imagen),
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -193,10 +229,23 @@ fun MostrarPedido(pedido: Pedidos) {
                     .padding(top = 20.dp)
             )
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
+
+                }
+            }
         }
     }
-}
+
 
 
 

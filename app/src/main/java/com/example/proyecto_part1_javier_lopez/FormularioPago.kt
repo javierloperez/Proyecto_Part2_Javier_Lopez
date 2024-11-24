@@ -45,12 +45,11 @@ fun FormularioPago(modifier: Modifier = Modifier, onAceptar: (Pago) -> Unit) {
     var cvvString by remember { mutableStateOf("") }
     var cvvInt = cvvString.toIntOrNull()?:0
 
-    val fechaComprobacion =Regex("^(0[1-9]|1[0-2])/\\d{4}$")
-    val tarjetaComprobacion =Regex("^\\d{4}\\d{4}\\d{4}\\d{4}$")
+    val fechaComprobacion = Regex("^(0[1-9]|1[0-2])/((202[4-9])|20[3-9][0-9]|2[1-9][0-9]{2})\$")
+    val tarjetaComprobacion =Regex("^\\d{16}$")
     var errorFecha by remember { mutableStateOf(false) }
     var errorNumTarjeta by remember { mutableStateOf(false) }
     var errorCvv by remember { mutableStateOf(false) }
-
     var pago: Pago
 
     Column(
@@ -77,7 +76,7 @@ fun FormularioPago(modifier: Modifier = Modifier, onAceptar: (Pago) -> Unit) {
                     .padding(top = 20.dp)
 
             ) {
-                Tarjetas(tiposTarjeta, estado, paraEstado,tarjetaElegida, onRespuestaCambiada = {tarjetaElegida=it})
+                Tarjetas(tiposTarjeta, estado, paraEstado, onRespuestaCambiada = {tarjetaElegida=it})
 
 
             }
@@ -98,7 +97,7 @@ fun FormularioPago(modifier: Modifier = Modifier, onAceptar: (Pago) -> Unit) {
                     )
                 TextField(
                     value = numTarjeta,
-                    onValueChange = { numTarjeta = it },
+                    onValueChange = { numTarjeta = it},
                     label = {
                         Text(
                             text = "----------------",
@@ -168,7 +167,8 @@ fun FormularioPago(modifier: Modifier = Modifier, onAceptar: (Pago) -> Unit) {
                     modifier = Modifier
                         .padding(top = 30.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                    isError = errorFecha
+                    isError = errorFecha,
+
                 )
 
             }
@@ -253,7 +253,6 @@ private fun Tarjetas(
     tiposTarjeta: List<String>,
     estado: String,
     paraEstado: (String) -> Unit,
-    tarjetaElegida:String,
     onRespuestaCambiada:(String)-> Unit
 ) {
     Text(
